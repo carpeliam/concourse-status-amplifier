@@ -1,0 +1,12 @@
+{
+  "name": "Concourse Status Amplifier",
+  "version": "0.1.0",
+  "description": "Amplify Concourse status via background image",
+  "content_scripts": [
+    {
+      "matches": ["*://*/teams/*/pipelines/*"],
+      "js": ["dist/contentScript.js"]
+    }
+  ],
+  "manifest_version": 2
+}

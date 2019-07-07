@@ -1,0 +1,25 @@
+{
+  "name": "concourse-status-amplifier",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "babel-node spec/run",
+    "build": "parcel build src/contentScript.js"
+  },
+  "dependencies": {
+    "parcel": "^1.12.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.0",
+    "@babel/node": "^7.5.0",
+    "@babel/preset-env": "^7.5.0",
+    "jasmine": "^3.4.0",
+    "jsdom": "^15.1.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  }
+}
