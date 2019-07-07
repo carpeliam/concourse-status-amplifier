@@ -1,7 +1,6 @@
 {
   "name": "concourse-status-amplifier",
   "version": "0.1.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "test": "babel-node spec/run",
