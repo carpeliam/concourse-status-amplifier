@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "test": "babel-node spec/run",
-    "build": "parcel build src/contentScript.js"
+    "build": "parcel build src/contentScript.js src/options.html",
+    "postbuild": "cp manifest.json dist/"
   },
   "dependencies": {
     "parcel": "^1.12.3"

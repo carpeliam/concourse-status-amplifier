@@ -2,11 +2,16 @@
   "name": "Concourse Status Amplifier",
   "version": "0.1.0",
   "description": "Amplify Concourse status via background image",
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "matches": ["*://*/teams/*/pipelines/*"],
-      "js": ["dist/contentScript.js"]
+      "js": ["contentScript.js"]
     }
   ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "manifest_version": 2
 }

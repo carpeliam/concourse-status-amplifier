@@ -1,41 +1,46 @@
 const pipelineContainer = () => document.getElementById('pipeline-container');
 
 export const PipelineState = {
-  BUILDING: 'BUILDING',
+  STARTED: 'STARTED',
   FAILED: 'FAILED',
-  PASSING: 'PASSING',
+  SUCCEEDED: 'SUCCEEDED',
 };
-
-export const PipelineImages = {
-  BUILDING: 'https://ketstatic.cdn.ket.org/wp_transfer/images/BOBL/BOBL__000708.3555962.848x480.jpg',
-  FAILED: 'https://pixel.nymag.com/imgs/daily/vulture/2019/06/25/25-this-is-fine-lede-new.w700.h467.jpg',
-  PASSING: 'https://www.agoodwaytothink.com/wp-content/uploads/2015/09/everything-is-awesome.jpg',
-}
 
 export function pipelineStatus(container = pipelineContainer()) {
   const jobs = Array.from(container.querySelectorAll('.job'));
 
   const allGreen = () => jobs.every(job => job.classList.contains('succeeded'));
-  const currentlyBuilding = () => jobs.some(job => job.classList.contains('started'));
+  const inProgress = () => jobs.some(job => job.classList.contains('started'));
   const anyRed = () => jobs.some(job => job.classList.contains('failed'));
 
-  if (currentlyBuilding()) {
-    return PipelineState.BUILDING;
+  if (inProgress()) {
+    return PipelineState.STARTED;
   } else {
     if (anyRed()) {
       return PipelineState.FAILED;
     }
     if (allGreen()) {
-      return PipelineState.PASSING;
+      return PipelineState.SUCCEEDED;
     }
     // undefined
   }
 }
 
-export function setBackground(state, container = pipelineContainer()) {
-  const bgImage = PipelineImages[state];
-
-  container.style.backgroundImage = (bgImage) ? `url("${bgImage}")` : 'none';
+export function setBackground(state, container = pipelineContainer(), storage = chrome.storage) {
+  storage.sync.get(['startedImage', 'failedImage', 'succeededImage'], ({ startedImage, failedImage, succeededImage }) => {
+    let bgImage;
+    switch (state) {
+      case PipelineState.STARTED:
+        bgImage = startedImage;
+        break;
+      case PipelineState.FAILED:
+        bgImage = failedImage;
+        break;
+      case PipelineState.SUCCEEDED:
+        bgImage = succeededImage;
+    }
+    container.style.backgroundImage = (bgImage) ? `url("${bgImage}")` : 'none';
+  });
 }
 
 export function wheneverJobsUpdate(cb, container = pipelineContainer(), { MutationObserver } = window) {

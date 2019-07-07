@@ -5,7 +5,7 @@ import {
   wheneverJobsUpdate,
   PipelineState,
   PipelineImages,
-} from '../src/util';
+} from '../src/contentScriptUtil';
 
 function justASec() {
   return new Promise(resolve => setTimeout(resolve));
@@ -28,7 +28,7 @@ describe('pipelineStatus', () => {
 
     const status = pipelineStatus(pipelineContainer);
 
-    expect(status).toEqual(PipelineState.BUILDING);
+    expect(status).toEqual(PipelineState.STARTED);
   });
 
   it('knows when a job has failed', () => {
@@ -44,24 +44,33 @@ describe('pipelineStatus', () => {
 
     const status = pipelineStatus(pipelineContainer);
 
-    expect(status).toEqual(PipelineState.PASSING);
+    expect(status).toEqual(PipelineState.SUCCEEDED);
   });
 });
 
 describe('setBackground', () => {
+  let storage;
+  beforeEach(() => {
+    storage = { sync: jasmine.createSpyObj('sync', ['get']) };
+    storage.sync.get.and.callFake((requestedImages, cb) => {
+      // ['startedImage', 'failedImage', 'succeededImage'] => { startedImage: 'startedImage', ... }
+      const imageMap = requestedImages.reduce((obj, img) => { obj[img] = img; return obj; }, {});
+      cb(imageMap);
+    });
+  });
   it('updates pipeline container background', () => {
     const { pipelineContainer } = renderedJobs(startedJob, succeededJob);
 
-    setBackground(PipelineState.BUILDING, pipelineContainer);
+    setBackground(PipelineState.STARTED, pipelineContainer, storage);
 
-    expect(pipelineContainer.style.backgroundImage).toContain(PipelineImages.BUILDING);
+    expect(pipelineContainer.style.backgroundImage).toContain('startedImage');
   });
 
   it('can unset background', () => {
     const { pipelineContainer } = renderedJobs(startedJob, succeededJob);
 
-    setBackground(PipelineState.BUILDING, pipelineContainer);
-    setBackground(undefined, pipelineContainer);
+    setBackground(PipelineState.STARTED, pipelineContainer, storage);
+    setBackground(undefined, pipelineContainer, storage);
 
     expect(pipelineContainer.style.backgroundImage).toEqual('none');
   });
