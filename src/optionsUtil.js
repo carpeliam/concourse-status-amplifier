@@ -1,9 +1,12 @@
 export function onSubmit(e, storage = chrome.storage) {
+  e.preventDefault();
   const form = e.target;
   const startedImage = form.elements.startedImage.value;
   const failedImage = form.elements.failedImage.value;
   const succeededImage = form.elements.succeededImage.value;
-  storage.sync.set({ startedImage, failedImage, succeededImage });
+  storage.sync.set({ startedImage, failedImage, succeededImage }, () => {
+    form.querySelector('[type="submit"]').textContent = 'Saved!';
+  });
 }
 
 export const DefaultImages = {
@@ -12,17 +15,23 @@ export const DefaultImages = {
   SUCCEEDED: 'https://www.agoodwaytothink.com/wp-content/uploads/2015/09/everything-is-awesome.jpg',
 }
 
-export function onLoad(e, storage = chrome.storage) {
+function associateBackgroundFor(input) {
+  const exampleBg = input.closest('p').querySelector('.example');
+  exampleBg.style.backgroundImage = `url("${input.value}")`;
+}
+
+export function onLoad({ target: document }, storage = chrome.storage) {
+  const form = document.getElementById('options');
   storage.sync.get({
     startedImage: DefaultImages.STARTED,
     failedImage: DefaultImages.FAILED,
     succeededImage: DefaultImages.SUCCEEDED,
-  }, ({ startedImage, failedImage, succeededImage }) => {
-    const document = e.target;
-    const form = document.getElementById('options');
-
-    form.elements.startedImage.value = startedImage;
-    form.elements.failedImage.value = failedImage;
-    form.elements.succeededImage.value = succeededImage;
+  }, images => {
+    ['started', 'failed', 'succeeded'].forEach(state => {
+      const input = form.elements[`${state}Image`];
+      input.value = images[`${state}Image`];
+      associateBackgroundFor(input);
+      input.addEventListener('blur', () => associateBackgroundFor(input));
+    });
   });
 }

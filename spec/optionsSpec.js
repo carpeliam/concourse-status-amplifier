@@ -1,34 +1,50 @@
 import { JSDOM } from 'jsdom';
 import { onSubmit, onLoad, DefaultImages } from '../src/optionsUtil';
 
-function renderedForm() {
-  const { window: { document } } = new JSDOM(`<!DOCTYPE html>
-    <form id="options">
-      <input type="text" name="startedImage" value="startedImageValue" />
-      <input type="text" name="succeededImage" value="succeededImageValue" />
-      <input type="text" name="failedImage" value="failedImageValue" />
-    </form>
-  </div>`);
+async function renderedForm() {
+  const { window: { document } } = await JSDOM.fromFile('./src/options.html');
   const form = document.getElementById('options');
   return { document, form };
+}
+
+function justASec() {
+  return new Promise(resolve => setTimeout(resolve));
 }
 
 describe('onSubmit', () => {
   let storage;
   beforeEach(() => {
     storage = { sync: jasmine.createSpyObj('sync', ['set']) };
-  })
-  it('persists form values to chrome.storage.sync', () => {
-    const { form } = renderedForm();
-    const event = { target: form };
+    storage.sync.set.and.callFake((_, cb) => cb());
+  });
 
+  it('persists form values to chrome.storage.sync', async () => {
+    const { form } = await renderedForm();
+    const event = { target: form, preventDefault: jasmine.createSpy('preventDefault') };
+
+    ['started', 'failed', 'succeeded'].forEach(state => {
+      form.elements[`${state}Image`].value = state;
+    });
     onSubmit(event, storage);
 
-    expect(storage.sync.set).toHaveBeenCalledWith({
-      startedImage: 'startedImageValue',
-      failedImage: 'failedImageValue',
-      succeededImage: 'succeededImageValue',
+    expect(event.preventDefault).toHaveBeenCalled();
+    const imageValues = storage.sync.set.calls.mostRecent().args[0];
+    expect(imageValues).toEqual({
+      startedImage: 'started',
+      failedImage: 'failed',
+      succeededImage: 'succeeded',
     });
+  });
+
+  it('updates submit button to indicate saving', async () => {
+    const { form } = await renderedForm();
+    const event = { target: form, preventDefault: () => {} };
+
+    onSubmit(event, storage);
+    await justASec();
+
+    const submitButton = form.querySelector('[type="submit"]');
+    expect(submitButton.textContent).toEqual('Saved!');
   });
 });
 
@@ -39,14 +55,30 @@ describe('onLoad', () => {
     storage.sync.get.and.callFake((imageMap, cb) => cb(imageMap));
   });
 
-  it('loads current values from chrome.storage.sync into form values', () => {
-    const { form, document } = renderedForm();
+  it('loads current values from chrome.storage.sync into form values', async () => {
+    const { form, document } = await renderedForm();
     const event = { target: document };
 
     onLoad(event, storage);
 
     expect(form.elements.startedImage.value).toEqual(DefaultImages.STARTED);
+    expect(form.querySelector('.startedImage .example').style.backgroundImage).toContain(DefaultImages.STARTED);
     expect(form.elements.failedImage.value).toEqual(DefaultImages.FAILED);
+    expect(form.querySelector('.failedImage .example').style.backgroundImage).toContain(DefaultImages.FAILED);
     expect(form.elements.succeededImage.value).toEqual(DefaultImages.SUCCEEDED);
+    expect(form.querySelector('.succeededImage .example').style.backgroundImage).toContain(DefaultImages.SUCCEEDED);
+  });
+
+  it('updates example background images on blur of text fields', async () => {
+    const { form, document } = await renderedForm();
+    const event = { target: document };
+
+    onLoad(event, storage);
+    form.elements.startedImage.focus();
+    form.elements.startedImage.value = 'http://example.com/path/to/img.jpg';
+    form.elements.startedImage.blur();
+
+    const startedImageExample = form.querySelector('.startedImage .example');
+    expect(startedImageExample.style.backgroundImage).toEqual('url(http://example.com/path/to/img.jpg)');
   });
 });

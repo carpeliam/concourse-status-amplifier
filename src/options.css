@@ -1,0 +1,30 @@
+body, form, .buttons {
+  margin: 0;
+}
+
+.fields {
+  margin: 1em;
+}
+.buttons {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 3px;
+  background-color: gray;
+}
+
+label {
+  font-weight: bold;
+  font-size: 115%;
+}
+
+input {
+  width: 75%;
+}
+
+.example {
+  display: block;
+  width: 75%;
+  height: 300px;
+}
