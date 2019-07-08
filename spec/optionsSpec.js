@@ -1,5 +1,5 @@
 import { JSDOM } from 'jsdom';
-import { onSubmit, onLoad, DefaultImages } from '../src/optionsUtil';
+import { onSubmit, onLoad, DefaultImages } from '../src/options/lib';
 
 async function renderedForm() {
   const { window: { document } } = await JSDOM.fromFile('./src/options.html');
@@ -62,11 +62,11 @@ describe('onLoad', () => {
     onLoad(event, storage);
 
     expect(form.elements.startedImage.value).toEqual(DefaultImages.STARTED);
-    expect(form.querySelector('.startedImage .example').style.backgroundImage).toContain(DefaultImages.STARTED);
+    expect(form.querySelector('.startedImage .csa-example').style.backgroundImage).toContain(DefaultImages.STARTED);
     expect(form.elements.failedImage.value).toEqual(DefaultImages.FAILED);
-    expect(form.querySelector('.failedImage .example').style.backgroundImage).toContain(DefaultImages.FAILED);
+    expect(form.querySelector('.failedImage .csa-example').style.backgroundImage).toContain(DefaultImages.FAILED);
     expect(form.elements.succeededImage.value).toEqual(DefaultImages.SUCCEEDED);
-    expect(form.querySelector('.succeededImage .example').style.backgroundImage).toContain(DefaultImages.SUCCEEDED);
+    expect(form.querySelector('.succeededImage .csa-example').style.backgroundImage).toContain(DefaultImages.SUCCEEDED);
   });
 
   it('updates example background images on blur of text fields', async () => {
@@ -78,7 +78,7 @@ describe('onLoad', () => {
     form.elements.startedImage.value = 'http://example.com/path/to/img.jpg';
     form.elements.startedImage.blur();
 
-    const startedImageExample = form.querySelector('.startedImage .example');
+    const startedImageExample = form.querySelector('.startedImage .csa-example');
     expect(startedImageExample.style.backgroundImage).toEqual('url(http://example.com/path/to/img.jpg)');
   });
 });

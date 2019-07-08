@@ -1,3 +1,3 @@
-import { pipelineStatus, setBackground, wheneverJobsUpdate } from './contentScriptUtil';
+import { pipelineStatus, setBackground, wheneverJobsUpdate } from './contentScript/lib';
 
 wheneverJobsUpdate(() => { setBackground(pipelineStatus()); });

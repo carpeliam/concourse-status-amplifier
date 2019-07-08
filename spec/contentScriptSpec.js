@@ -4,8 +4,7 @@ import {
   setBackground,
   wheneverJobsUpdate,
   PipelineState,
-  PipelineImages,
-} from '../src/contentScriptUtil';
+} from '../src/contentScript/lib';
 
 function justASec() {
   return new Promise(resolve => setTimeout(resolve));

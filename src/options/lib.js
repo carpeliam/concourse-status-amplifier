@@ -16,7 +16,7 @@ export const DefaultImages = {
 }
 
 function associateBackgroundFor(input) {
-  const exampleBg = input.closest('p').querySelector('.example');
+  const exampleBg = input.closest('p').querySelector('.csa-example');
   exampleBg.style.backgroundImage = `url("${input.value}")`;
 }
 

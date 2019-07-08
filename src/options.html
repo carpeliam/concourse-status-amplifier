@@ -2,7 +2,8 @@
 <html>
 <head>
   <title>Concourse Status Amplifier Options</title>
-  <link rel="stylesheet" type="text/css" href="options.css">
+  <link rel="stylesheet" type="text/css" href="options/options.css">
+  <link rel="stylesheet" type="text/css" href="contentScript.css">
 </head>
 <body>
   <form id="options">
@@ -13,27 +14,27 @@
           In Progress<br />
           <input type="text" name="startedImage" size="60" />
         </label>
-        <span class="example"></span>
+        <span class="csa-example"></span>
       </p>
       <p class="succeededImage">
         <label>
           All Passing<br />
           <input type="text" name="succeededImage" size="60" />
         </label>
-        <span class="example"></span>
+        <span class="csa-example"></span>
       </p>
       <p class="failedImage">
         <label>
           Failing<br />
           <input type="text" name="failedImage" size="60" />
         </label>
-        <span class="example"></span>
+        <span class="csa-example"></span>
       </p>
     </div>
     <div class="buttons">
       <button type="submit">Save</button>
     </div>
   </form>
-  <script src="options.js"></script>
+  <script src="options/options.js"></script>
 </body>
 </html>

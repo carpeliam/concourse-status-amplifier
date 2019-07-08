@@ -6,6 +6,7 @@
   "content_scripts": [
     {
       "matches": ["*://*/teams/*/pipelines/*"],
+      "css": ["contentScript.css"],
       "js": ["contentScript.js"]
     }
   ],
