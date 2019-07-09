@@ -4,6 +4,7 @@ import {
   setBackground,
   wheneverJobsUpdate,
   PipelineState,
+  pipelineContainer,
 } from '../src/contentScript/lib';
 
 function justASec() {
@@ -16,9 +17,33 @@ function renderedJobs(...jobs) {
   return { window, pipelineContainer };
 }
 
+function concourseV4() {
+  const { window } = new JSDOM(`<!DOCTYPE html><div id="content"></div>`);
+  const content = window.document.getElementById('content');
+  return { window, content };
+}
+
 const succeededJob = '<div class="succeeded job"></div>';
 const startedJob = '<div class="started job"></div>';
 const failedJob = '<div class="failed job"></div>';
+
+describe('pipelineContainer', () => {
+  it('returns #pipeline-container in Concourse v5', () => {
+    const { window, pipelineContainer: expectedContainer } = renderedJobs();
+
+    const actualContainer = pipelineContainer(window);
+
+    expect(actualContainer).toBe(expectedContainer);
+  });
+
+  it('returns #content in Concourse < v5', () => {
+    const { window, content: expectedContainer } = concourseV4();
+
+    const actualContainer = pipelineContainer(window);
+
+    expect(actualContainer).toBe(expectedContainer);
+  });
+});
 
 describe('pipelineStatus', () => {
 

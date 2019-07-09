@@ -1,10 +1,16 @@
-const pipelineContainer = () => document.getElementById('pipeline-container');
-
 export const PipelineState = {
   STARTED: 'STARTED',
   FAILED: 'FAILED',
   SUCCEEDED: 'SUCCEEDED',
 };
+
+export function pipelineContainer({ document } = window) {
+  const pipelineContainer = document.getElementById('pipeline-container');
+  if (pipelineContainer) {
+    return pipelineContainer;
+  }
+  return document.getElementById('content');
+}
 
 export function pipelineStatus(container = pipelineContainer()) {
   const jobs = Array.from(container.querySelectorAll('.job'));
