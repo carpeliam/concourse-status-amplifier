@@ -1,4 +1,5 @@
 import { JSDOM } from 'jsdom';
+import { DefaultImages } from '../src/common';
 import {
   pipelineStatus,
   setBackground,
@@ -76,18 +77,14 @@ describe('setBackground', () => {
   let storage;
   beforeEach(() => {
     storage = { sync: jasmine.createSpyObj('sync', ['get']) };
-    storage.sync.get.and.callFake((requestedImages, cb) => {
-      // ['startedImage', 'failedImage', 'succeededImage'] => { startedImage: 'startedImage', ... }
-      const imageMap = requestedImages.reduce((obj, img) => { obj[img] = img; return obj; }, {});
-      cb(imageMap);
-    });
+    storage.sync.get.and.callFake((imageMap, cb) => cb(imageMap));
   });
   it('updates pipeline container background', () => {
     const { pipelineContainer } = renderedJobs(startedJob, succeededJob);
 
     setBackground(PipelineState.STARTED, pipelineContainer, storage);
 
-    expect(pipelineContainer.style.backgroundImage).toContain('startedImage');
+    expect(pipelineContainer.style.backgroundImage).toContain(DefaultImages.STARTED);
   });
 
   it('can unset background', () => {

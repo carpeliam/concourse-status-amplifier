@@ -1,3 +1,5 @@
+import { DefaultImages } from '../common';
+
 export const PipelineState = {
   STARTED: 'STARTED',
   FAILED: 'FAILED',
@@ -33,7 +35,11 @@ export function pipelineStatus(container = pipelineContainer()) {
 }
 
 export function setBackground(state, container = pipelineContainer(), storage = chrome.storage) {
-  storage.sync.get(['startedImage', 'failedImage', 'succeededImage'], ({ startedImage, failedImage, succeededImage }) => {
+  storage.sync.get({
+    startedImage: DefaultImages.STARTED,
+    failedImage: DefaultImages.FAILED,
+    succeededImage: DefaultImages.SUCCEEDED,
+  }, ({ startedImage, failedImage, succeededImage }) => {
     let bgImage;
     switch (state) {
       case PipelineState.STARTED:

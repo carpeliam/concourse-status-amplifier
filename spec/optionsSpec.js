@@ -1,5 +1,6 @@
 import { JSDOM } from 'jsdom';
-import { onSubmit, onLoad, DefaultImages } from '../src/options/lib';
+import { DefaultImages } from '../src/common';
+import { onSubmit, onLoad } from '../src/options/lib';
 
 async function renderedForm() {
   const { window: { document } } = await JSDOM.fromFile('./src/options.html');
