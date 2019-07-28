@@ -1,6 +1,6 @@
 {
   "name": "Concourse Status Amplifier",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Amplify Concourse status via background image",
   "permissions": ["storage"],
   "content_scripts": [

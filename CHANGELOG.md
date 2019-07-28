@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+## [0.2.1] - 2019-07-28
+### Changed
+- Bumped manifest version.
+
 ## [0.2.0] - 2019-07-27
 ### Added
 - Customization of image backgrounds via `Options`.
