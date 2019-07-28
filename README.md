@@ -1,6 +1,6 @@
 # Concourse Status Amplifier
 
-Concourse Status Amplifier is a Chrome extension that replaces your [Concourse](https://concourse-ci.org/) pipeline with a sweet graphic, depending on your build status.
+Concourse Status Amplifier is a Chrome extension that replaces your [Concourse](https://concourse-ci.org/) pipeline background with a sweet graphic, depending on your build status.
 
 Because you're probably looking at your Concourse pipeline from a mile away, and it's hard to see those little boxes flashing from your seat.
 
