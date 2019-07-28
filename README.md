@@ -1,4 +1,4 @@
-# Concourse Status Amplifier
+# Concourse Status Amplifier [![Build Status](https://travis-ci.org/carpeliam/concourse-status-amplifier.svg?branch=master)](https://travis-ci.org/carpeliam/concourse-status-amplifier)
 
 Concourse Status Amplifier is a Chrome extension that replaces your [Concourse](https://concourse-ci.org/) pipeline background with a sweet graphic, depending on your build status.
 
