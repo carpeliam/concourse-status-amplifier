@@ -5,8 +5,9 @@ export function onSubmit(e, storage = chrome.storage) {
   const form = e.target;
   const startedImage = form.elements.startedImage.value;
   const failedImage = form.elements.failedImage.value;
+  const erroredImage = form.elements.erroredImage.value;
   const succeededImage = form.elements.succeededImage.value;
-  storage.sync.set({ startedImage, failedImage, succeededImage }, () => {
+  storage.sync.set({ startedImage, failedImage, erroredImage, succeededImage }, () => {
     form.querySelector('[type="submit"]').textContent = 'Saved!';
   });
 }
@@ -21,9 +22,10 @@ export function onLoad({ target: document }, storage = chrome.storage) {
   storage.sync.get({
     startedImage: DefaultImages.STARTED,
     failedImage: DefaultImages.FAILED,
+    erroredImage: DefaultImages.ERRORED,
     succeededImage: DefaultImages.SUCCEEDED,
   }, images => {
-    ['started', 'failed', 'succeeded'].forEach(state => {
+    ['started', 'failed', 'errored', 'succeeded'].forEach(state => {
       const input = form.elements[`${state}Image`];
       input.value = images[`${state}Image`];
       associateBackgroundFor(input);

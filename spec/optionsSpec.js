@@ -23,7 +23,7 @@ describe('onSubmit', () => {
     const { form } = await renderedForm();
     const event = { target: form, preventDefault: jasmine.createSpy('preventDefault') };
 
-    ['started', 'failed', 'succeeded'].forEach(state => {
+    ['started', 'failed', 'errored', 'succeeded'].forEach(state => {
       form.elements[`${state}Image`].value = state;
     });
     onSubmit(event, storage);
@@ -33,6 +33,7 @@ describe('onSubmit', () => {
     expect(imageValues).toEqual({
       startedImage: 'started',
       failedImage: 'failed',
+      erroredImage: 'errored',
       succeededImage: 'succeeded',
     });
   });
@@ -66,6 +67,8 @@ describe('onLoad', () => {
     expect(form.querySelector('.startedImage .csa-example').style.backgroundImage).toContain(DefaultImages.STARTED);
     expect(form.elements.failedImage.value).toEqual(DefaultImages.FAILED);
     expect(form.querySelector('.failedImage .csa-example').style.backgroundImage).toContain(DefaultImages.FAILED);
+    expect(form.elements.erroredImage.value).toEqual(DefaultImages.ERRORED);
+    expect(form.querySelector('.erroredImage .csa-example').style.backgroundImage).toContain(DefaultImages.ERRORED);
     expect(form.elements.succeededImage.value).toEqual(DefaultImages.SUCCEEDED);
     expect(form.querySelector('.succeededImage .csa-example').style.backgroundImage).toContain(DefaultImages.SUCCEEDED);
   });
