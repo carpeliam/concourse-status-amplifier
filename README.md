@@ -16,6 +16,10 @@ You have two options:
   6. You've got a sweet new extension now! Right-click on the Chrome extension icon (probably a gray 'C') and select `Options` to choose images from the Internet corresponding to an *All Passing* state, a *Failing* state, and an *In Progress* state.
   7. Browse on over to your favorite Concourse instance, and kick off a job.
 
+## Cool icon. Who made it?
+
+That'd be [Cynthia Conklin](https://cconklin.myportfolio.com/about) - she does good work!
+
 ## How do I give feedback?
 
 I ❤️ Feedback. [Issues] and [pull requests] are welcome! Let me know how this can make your Concourse experience brighter.

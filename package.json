@@ -5,7 +5,7 @@
   "scripts": {
     "test": "babel-node spec/run",
     "build": "parcel build src/*",
-    "postbuild": "cp manifest.json dist/"
+    "postbuild": "mkdir dist/icons/ && cp icons/*.png dist/icons/ && cp manifest.json dist/"
   },
   "dependencies": {
     "parcel": "^1.12.3"

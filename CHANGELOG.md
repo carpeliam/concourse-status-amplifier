@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Background image display for pipelines in an errored state.
+- Icons in PNG and AI format, thanks to [Cynthia Conklin](https://cconklin.myportfolio.com/about)!
 
 ## [0.2.1] - 2019-07-28
 ### Changed
