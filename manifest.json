@@ -1,24 +1,34 @@
 {
-  "name": "Concourse Status Amplifier",
-  "version": "0.2.1",
-  "manifest_version": 2,
-  "description": "Amplify Concourse status via background image",
-  "permissions": ["storage"],
-  "content_scripts": [
-    {
-      "matches": ["*://*/teams/*/pipelines/*"],
-      "exclude_matches": ["*://*/teams/*/pipelines/*/jobs/*"],
-      "css": ["contentScript.css"],
-      "js": ["contentScript.js"]
-    }
-  ],
-  "options_ui": {
-    "page": "options.html",
-    "open_in_tab": true
-  },
-  "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  }
+	"name": "Concourse Status Amplifier",
+	"version": "0.3.0",
+	"manifest_version": 2,
+	"description": "Amplify Concourse status via background image",
+	"permissions": [
+		"storage"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+				"*://*/teams/*/pipelines/*"
+			],
+			"exclude_matches": [
+				"*://*/teams/*/pipelines/*/jobs/*"
+			],
+			"css": [
+				"contentScript.css"
+			],
+			"js": [
+				"contentScript.js"
+			]
+		}
+	],
+	"options_ui": {
+		"page": "options.html",
+		"open_in_tab": true
+	},
+	"icons": {
+		"16": "icons/icon16.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
+	}
 }
