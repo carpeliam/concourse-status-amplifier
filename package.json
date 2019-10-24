@@ -5,7 +5,8 @@
   "scripts": {
     "test": "babel-node spec/run",
     "build": "parcel build src/*",
-    "postbuild": "mkdir dist/icons/ && cp icons/*.png dist/icons/ && cp manifest.json dist/"
+    "postbuild": "mkdir dist/icons/ && cp icons/*.png dist/icons/ && cp manifest.json dist/",
+    "version": "version-changelog CHANGELOG.md && changelog-verify CHANGELOG.md && ./scripts/updateManifestVersion.js && git add CHANGELOG.md manifest.json"
   },
   "dependencies": {
     "parcel": "^1.12.3"
@@ -14,8 +15,11 @@
     "@babel/core": "^7.5.0",
     "@babel/node": "^7.5.0",
     "@babel/preset-env": "^7.5.0",
+    "changelog-verify": "^1.1.2",
+    "chrome-manifest": "^0.2.9",
     "jasmine": "^3.4.0",
-    "jsdom": "^15.1.1"
+    "jsdom": "^15.1.1",
+    "version-changelog": "^3.1.1"
   },
   "babel": {
     "presets": [
