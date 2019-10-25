@@ -4,24 +4,18 @@
 	"manifest_version": 2,
 	"description": "Amplify Concourse status via background image",
 	"permissions": [
-		"storage"
+		"storage",
+		"activeTab"
 	],
-	"content_scripts": [
-		{
-			"matches": [
-				"*://*/teams/*/pipelines/*"
-			],
-			"exclude_matches": [
-				"*://*/teams/*/pipelines/*/jobs/*"
-			],
-			"css": [
-				"contentScript.css"
-			],
-			"js": [
-				"contentScript.js"
-			]
-		}
-	],
+	"background": {
+		"scripts": [
+			"background.js"
+		],
+		"persistent": false
+	},
+	"browser_action": {
+		"default_title": "Amplify your Concourse Status"
+	},
 	"options_ui": {
 		"page": "options.html",
 		"open_in_tab": true
