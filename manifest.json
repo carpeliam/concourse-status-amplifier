@@ -3,6 +3,12 @@
 	"version": "0.4.0",
 	"manifest_version": 2,
 	"description": "Amplify Concourse status via background image",
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "csa@carpeliam.com",
+			"strict_min_version": "57.0"
+		}
+	},
 	"permissions": [
 		"storage",
 		"activeTab"
