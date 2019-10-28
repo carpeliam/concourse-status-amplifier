@@ -1,6 +1,6 @@
 {
 	"name": "Concourse Status Amplifier",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"manifest_version": 2,
 	"description": "Amplify Concourse status via background image",
 	"browser_specific_settings": {
