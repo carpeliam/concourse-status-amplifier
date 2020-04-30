@@ -5,10 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Built-in support for https://ci.concourse-ci.org and https://hush-house.pivotal.io.
+- Dynamic support for other domains, via "Enable Concourse Status Amplifier on this domain".
 
 ## [0.4.1][] - 2019-10-27
 ### Added
-- Support for Firefox
+- Support for Firefox.
 
 ## [0.4.0][] - 2019-10-26
 ### Changed

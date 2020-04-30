@@ -6,12 +6,36 @@
 	"browser_specific_settings": {
 		"gecko": {
 			"id": "csa@carpeliam.com",
-			"strict_min_version": "57.0"
+			"strict_min_version": "59.0"
 		}
 	},
 	"permissions": [
+		"https://ci.concourse-ci.org/teams/*/pipelines/*",
+		"https://hush-house.pivotal.io/teams/*/pipelines/*",
 		"storage",
+		"contextMenus",
 		"activeTab"
+	],
+	"optional_permissions": [
+		"http://*/*",
+		"https://*/*"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+				"https://ci.concourse-ci.org/teams/*/pipelines/*",
+				"https://hush-house.pivotal.io/teams/*/pipelines/*"
+			],
+			"exclude_matches": [
+				"*://*/teams/*/pipelines/*/jobs/*"
+			],
+			"css": [
+				"contentScript.css"
+			],
+			"js": [
+				"contentScript.js"
+			]
+		}
 	],
 	"background": {
 		"scripts": [

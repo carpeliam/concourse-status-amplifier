@@ -1,4 +1,4 @@
-chrome.browserAction.onClicked.addListener(() => {
-  chrome.tabs.executeScript({ file: 'contentScript.js' });
-  chrome.tabs.insertCSS({ file: 'contentScript.css' });
-});
+import 'webext-dynamic-content-scripts';
+import addDomainPermissionToggle from 'webext-domain-permission-toggle';
+
+addDomainPermissionToggle();

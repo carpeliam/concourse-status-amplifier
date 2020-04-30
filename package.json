@@ -10,7 +10,9 @@
     "version": "version-changelog CHANGELOG.md && changelog-verify CHANGELOG.md && ./scripts/updateManifestVersion.js && git add CHANGELOG.md manifest.json"
   },
   "dependencies": {
-    "parcel": "^1.12.3"
+    "parcel-bundler": "^1.12.4",
+    "webext-domain-permission-toggle": "^1.0.0",
+    "webext-dynamic-content-scripts": "^6.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
@@ -19,12 +21,15 @@
     "changelog-verify": "^1.1.2",
     "chrome-manifest": "^0.2.9",
     "jasmine": "^3.4.0",
-    "jsdom": "^15.1.1",
+    "jsdom": "^16.2.2",
     "version-changelog": "^3.1.1"
   },
   "babel": {
     "presets": [
       "@babel/preset-env"
     ]
-  }
+  },
+  "browserslist": [
+    "Firefox 59"
+  ]
 }
