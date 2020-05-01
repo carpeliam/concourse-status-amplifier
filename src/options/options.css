@@ -6,15 +6,26 @@ body, form, .buttons {
   margin: 1em;
 }
 .buttons {
-  position: fixed;
-  left: 0;
-  bottom: 0;
+  position: sticky;
+  top: 0;
   width: 100%;
-  padding: 3px;
+  padding: 10px;
   background-color: gray;
 }
 
-label {
+button[type="submit"] {
+  padding: 0.5em 1em;
+  border-radius: 2px;
+  border: none;
+  background-color: #3dd28d;
+  color: white;
+  cursor: pointer;
+}
+button[type="submit"]:hover {
+  background-color: #31de8e;
+}
+
+label, button[type="submit"] {
   font-weight: bold;
   font-size: 115%;
 }
