@@ -14,7 +14,7 @@ function justASec() {
 
 function renderedJobs(...jobs) {
   const { window } = new JSDOM(`<!DOCTYPE html><div id="pipeline-container">${jobs.join('')}</div>`);
-  const pipelineContainer = window.document.getElementById('pipeline-container');
+  const pipelineContainer = Promise.resolve(window.document.getElementById('pipeline-container'));
   return { window, pipelineContainer };
 }
 
@@ -30,53 +30,62 @@ const failedJob = '<div class="failed job"></div>';
 const erroredJob = '<div class="errored job"></div>';
 
 describe('pipelineContainer', () => {
-  it('returns #pipeline-container in Concourse v5', () => {
+  it('returns #pipeline-container in Concourse >= v5', async () => {
     const { window, pipelineContainer: expectedContainer } = renderedJobs();
 
-    const actualContainer = pipelineContainer(window);
+    const actualContainer = await pipelineContainer(window);
 
-    expect(actualContainer).toBe(expectedContainer);
+    expect(actualContainer).toBe(await expectedContainer);
   });
 
-  it('returns #content in Concourse < v5', () => {
+  it('returns #content in Concourse < v5', async () => {
     const { window, content: expectedContainer } = concourseV4();
 
-    const actualContainer = pipelineContainer(window);
+    const actualContainer = await pipelineContainer(window);
 
-    expect(actualContainer).toBe(expectedContainer);
+    expect(actualContainer).toBe(await expectedContainer);
+  });
+
+  describe('when the container is not yet in the DOM', () => {
+    it('eventually returns the container', async () => {
+      const { window } = new JSDOM(`<!DOCTYPE html><body></body>`);
+      const actualContainer = pipelineContainer(window);
+      window.document.body.insertAdjacentHTML('beforeend', '<div id="pipeline-container"></div>');
+      expect(await actualContainer).toEqual(window.document.getElementById('pipeline-container'));
+    });
   });
 });
 
 describe('pipelineStatus', () => {
 
-  it('knows when a job has started', () => {
+  it('knows when a job has started', async () => {
     const { pipelineContainer } = renderedJobs(startedJob, failedJob, succeededJob);
 
-    const status = pipelineStatus(pipelineContainer);
+    const status = await pipelineStatus(pipelineContainer);
 
     expect(status).toEqual(PipelineState.STARTED);
   });
 
-  it('knows when a job has failed', () => {
+  it('knows when a job has failed', async () => {
     const { pipelineContainer } = renderedJobs(failedJob, erroredJob, succeededJob);
 
-    const status = pipelineStatus(pipelineContainer);
+    const status = await pipelineStatus(pipelineContainer);
 
     expect(status).toEqual(PipelineState.FAILED);
   });
 
-  it('knows when a job has errored', () => {
+  it('knows when a job has errored', async () => {
     const { pipelineContainer } = renderedJobs(succeededJob, erroredJob);
 
-    const status = pipelineStatus(pipelineContainer);
+    const status = await pipelineStatus(pipelineContainer);
 
     expect(status).toEqual(PipelineState.ERRORED);
   });
 
-  it('knows when all jobs have succeeded', () => {
+  it('knows when all jobs have succeeded', async () => {
     const { pipelineContainer } = renderedJobs(succeededJob, succeededJob);
 
-    const status = pipelineStatus(pipelineContainer);
+    const status = await pipelineStatus(pipelineContainer);
 
     expect(status).toEqual(PipelineState.SUCCEEDED);
   });
@@ -88,23 +97,23 @@ describe('setBackground', () => {
     storage = { sync: jasmine.createSpyObj('sync', ['get']) };
     storage.sync.get.and.callFake((imageMap, cb) => cb(imageMap));
   });
-  it('updates pipeline container background', () => {
+  it('updates pipeline container background', async () => {
     const { pipelineContainer } = renderedJobs(succeededJob);
 
-    ['STARTED', 'FAILED', 'ERRORED', 'SUCCEEDED'].forEach(state => {
-      setBackground(PipelineState[state], pipelineContainer, storage);
+    ['STARTED', 'FAILED', 'ERRORED', 'SUCCEEDED'].forEach(async state => {
+      await setBackground(Promise.resolve(PipelineState[state]), pipelineContainer, storage);
 
-      expect(pipelineContainer.style.backgroundImage).toContain(DefaultImages[state]);
+      expect((await pipelineContainer).style.backgroundImage).toContain(DefaultImages[state]);
     });
   });
 
-  it('can unset background', () => {
+  it('can unset background', async () => {
     const { pipelineContainer } = renderedJobs(startedJob, succeededJob);
 
-    setBackground(PipelineState.STARTED, pipelineContainer, storage);
-    setBackground(undefined, pipelineContainer, storage);
+    await setBackground(Promise.resolve(PipelineState.STARTED), pipelineContainer, storage);
+    await setBackground(Promise.resolve(undefined), pipelineContainer, storage);
 
-    expect(pipelineContainer.style.backgroundImage).toEqual('none');
+    expect((await pipelineContainer).style.backgroundImage).toEqual('none');
   });
 });
 
@@ -113,7 +122,7 @@ describe('wheneverJobsUpdate', () => {
     const { window, pipelineContainer } = renderedJobs(failedJob, succeededJob);
     const jobHasUpdatedSpy = jasmine.createSpy('jobHasUpdated');
 
-    wheneverJobsUpdate(jobHasUpdatedSpy, pipelineContainer, window);
+    await wheneverJobsUpdate(jobHasUpdatedSpy, pipelineContainer, window);
     window.document.querySelector('.failed').classList.replace('failed', 'succeeded');
 
     await justASec();
@@ -125,7 +134,7 @@ describe('wheneverJobsUpdate', () => {
     const { window, pipelineContainer } = renderedJobs(extraneousElement, succeededJob);
     const jobHasUpdatedSpy = jasmine.createSpy('jobHasUpdated');
 
-    wheneverJobsUpdate(jobHasUpdatedSpy, pipelineContainer, window);
+    await wheneverJobsUpdate(jobHasUpdatedSpy, pipelineContainer, window);
     window.document.querySelector('.extraneous.element').classList.add('failed');
 
     await justASec();
